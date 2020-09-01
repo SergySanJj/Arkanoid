@@ -45,8 +45,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnable: {fileID: 0}
   offset: 0.27
-  marginTop: 0.05
-  marginBot: 0.3
-  marginLeft: 0
+  marginTop: 0.1
+  marginBot: 0.7
+  marginLeft: 0.05
   marginRight: 0
   probability: 0.42
