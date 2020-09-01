@@ -10,7 +10,7 @@ public class Spawner : MonoBehaviour
 
     [Range(0.0f, 0.3f)]
     [SerializeField] private float marginTop = 0.1f;
-    [Range(0.0f, 0.7f)]
+    [Range(0.3f, 0.7f)]
     [SerializeField] private float marginBot = 0.3f;
     [Range(0.0f, 0.5f)]
     [SerializeField] private float marginLeft = 0.1f;
@@ -74,7 +74,7 @@ public class Spawner : MonoBehaviour
 
     public void IncreaceDifficulty()
     {
-        marginBot += 0.2f;
+        marginBot -= 0.2f;
         if (marginBot > 0.7f)
         {
             marginBot = 0.7f;

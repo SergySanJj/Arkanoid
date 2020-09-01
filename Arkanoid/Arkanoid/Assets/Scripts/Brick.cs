@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Brick : MonoBehaviour
 {
-    int health = 2;
-    int points = 2;
+    int health = 1;
+    int points = 1;
 
     [SerializeField] private List<Material> materials = new List<Material>();
 

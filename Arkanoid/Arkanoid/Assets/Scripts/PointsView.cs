@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PointsView : MonoBehaviour
 {
-
     private TextMeshProUGUI textMesh;
 
 

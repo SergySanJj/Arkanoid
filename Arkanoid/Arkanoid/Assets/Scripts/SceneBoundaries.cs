@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class SceneBoundaries : MonoBehaviour
 {
-    [SerializeField] private GameObject go = null;
+    [SerializeField] private GameObject hBoundary = null;
+
     [SerializeField] private Camera cam = null;
 
     public static SceneBoundaries self = null;
@@ -73,9 +74,9 @@ public class SceneBoundaries : MonoBehaviour
                IsInsideVerticalBoundaries(pos, offset);
     }
 
-    public bool EscapedBottom(Vector3 pos, float offset)
+    public bool EscapedBottom(Vector3 pos)
     {
-        return pos.y <= bottomLeft.y + offset;
+        return pos.y <= bottomLeft.y;
     }
 
     public Vector3 LimitHorizontal(Vector3 vec, float offset)
@@ -123,14 +124,16 @@ public class SceneBoundaries : MonoBehaviour
         topRight = cam.ViewportToWorldPoint(new Vector3(1, 1, cam.nearClipPlane));
         topLeft = cam.ViewportToWorldPoint(new Vector3(0, 1, cam.nearClipPlane));
 
-        
+        DisplayBoundaries();
     }
 
     private void DisplayBoundaries()
     {
-        Instantiate(go, new Vector3(topLeft.x, topLeft.y, cam.nearClipPlane), Quaternion.identity);
-        Instantiate(go, new Vector3(topRight.x, topRight.y, cam.nearClipPlane), Quaternion.identity);
-        Instantiate(go, new Vector3(bottomLeft.x, bottomLeft.y, cam.nearClipPlane), Quaternion.identity);
-        Instantiate(go, new Vector3(bottomRight.x, bottomRight.y, cam.nearClipPlane), Quaternion.identity);
+        Vector3 middle = new Vector3((topLeft.x + topRight.x) / 2.0f, (topLeft.y + bottomLeft.y) / 2.0f, 0.0f);
+
+        Instantiate(hBoundary, new Vector3(middle.x, topLeft.y, cam.nearClipPlane), Quaternion.identity);
+
+        Instantiate(hBoundary, new Vector3(bottomLeft.x, middle.y, cam.nearClipPlane), Quaternion.Euler(0, 0, 90));
+        Instantiate(hBoundary, new Vector3(bottomRight.x, middle.y, cam.nearClipPlane), Quaternion.Euler(0, 0, 90));
     }
 }
