@@ -5,7 +5,41 @@ using UnityEngine;
 public class Brick : MonoBehaviour
 {
     int health = 2;
-    int value = 2;
+    int points = 2;
+
+    [SerializeField] private List<Material> materials;
+
+    private void Start()
+    {
+        ChooseMaterial();
+    }
+
+    public void SetHealth(int value)
+    {
+
+        if (value > materials.Count)
+        {
+            health = materials.Count;
+        }
+        else
+        {
+            health = value;
+        }
+        points = health;
+        ChooseMaterial();
+    }
+
+    public void ChooseMaterial()
+    {
+        if (health > materials.Count)
+        {
+            gameObject.GetComponent<MeshRenderer>().material = materials[0];
+        } else
+        {
+            gameObject.GetComponent<MeshRenderer>().material = materials[health-1];
+        }
+    }
+
 
     void Update()
     {
@@ -17,6 +51,10 @@ public class Brick : MonoBehaviour
         health -= power;
         if (!IsAlive())
             Die();
+        else
+        {
+            ChooseMaterial();
+        }
     }
 
     public bool IsAlive()
@@ -26,7 +64,7 @@ public class Brick : MonoBehaviour
 
     public void Die()
     {
-        GameEvents.self.IncreasedScore(value);
+        GameEvents.self.IncreasedScore(points);
         Destroy(this.gameObject);
     }
 }

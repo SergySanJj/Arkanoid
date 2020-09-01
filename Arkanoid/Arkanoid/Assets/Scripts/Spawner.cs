@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private GameObject spawnable;
+    [SerializeField] private GameObject spawnable = null;
     [Range(0.1f, 10.0f)]
     [SerializeField] private float offset = 1f;
 
@@ -58,6 +58,7 @@ public class Spawner : MonoBehaviour
 
     private void Spawn(Vector3 pos)
     {
-        Instantiate(spawnable, pos, Quaternion.identity);
+        var go = Instantiate(spawnable, pos, Quaternion.identity);
+        go.GetComponent<Brick>()?.SetHealth((int)Random.Range(1f, 5f));
     }
 }

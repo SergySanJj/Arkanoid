@@ -41,7 +41,7 @@ public class Ball : MonoBehaviour
                 Die();
             } else
             {
-                _direction = SceneBoundaries.self.Reflect(newPos, _direction, offset);
+                _direction = SceneBoundaries.self.Reflect(newPos, _direction, offset).normalized;
                 transform.position = SceneBoundaries.self.LimitAll(newPos, offset);
             }
         }
@@ -49,21 +49,11 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        _direction = Vector3.Reflect(_direction, collision.GetContact(0).normal);
+        _direction = Vector3.Reflect(_direction, collision.GetContact(0).normal).normalized;
         _direction.z = 0;
 
         var brick = collision.gameObject.GetComponent<Brick>();
         brick?.ReceiveHit(power);
-
-        FixBadAngle();
-
-        if (Mathf.Abs(Vector3.Angle(_direction, xAxis)) < 0.3f || Mathf.Abs(Vector3.Angle(_direction, yAxis)) < 0.3f)
-        {
-            Debug.Log("Inc speed");
-            _currentSpeed = baseSpeed * 4;
-        } else {
-            _currentSpeed = baseSpeed;
-        }
     }
 
     private void Die()
