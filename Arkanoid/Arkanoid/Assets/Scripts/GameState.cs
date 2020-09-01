@@ -4,15 +4,33 @@ using UnityEngine;
 
 public class GameState : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public int bricksLeft { get; set; } = 1;
+    public int points { get; set; } = 0;
+
+    public static GameState self = null;
+    private GameState()
     {
-        
+    }
+    void Awake()
+    {
+        if (self == null)
+        {
+            self = this;
+        }
+        else if (self == this)
+        {
+            Destroy(gameObject);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        
+        GameEvents.self.OnIncreaseScore += IncreacePoints;    
+    }
+
+    public void IncreacePoints(int byValue)
+    {
+        points += byValue;
+        GameEvents.self.UpdateUI();
     }
 }

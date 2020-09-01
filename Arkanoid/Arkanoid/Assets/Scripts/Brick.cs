@@ -5,6 +5,7 @@ using UnityEngine;
 public class Brick : MonoBehaviour
 {
     int health = 2;
+    int value = 2;
 
     void Update()
     {
@@ -25,6 +26,7 @@ public class Brick : MonoBehaviour
 
     public void Die()
     {
+        GameEvents.self.IncreasedScore(value);
         Destroy(this.gameObject);
     }
 }

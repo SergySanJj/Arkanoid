@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    [SerializeField] float speed = 1.0f;
+    [SerializeField] float baseSpeed = 1.0f;
     [SerializeField] float offset = 0.1f;
+    [SerializeField] private float angleChangeEps = 0.1f;
 
     // Damage per hit
     [SerializeField] int power = 1;
     
-    private Vector3 _direction;
-    
+    private Vector3 _direction= Vector3.zero;
+    private float _currentSpeed = 0;
 
+    private Vector3 xAxis = new Vector3(1f, 0f, 0f);
+    private Vector3 yAxis = new Vector3(0f, 1f, 0f);
 
 
     void Start()
     {
-        _direction = new Vector3(1, 1, 0).normalized;
+        GameEvents.self.OnStartGame += StartGame;
     }
 
     void Update()
@@ -27,7 +30,7 @@ public class Ball : MonoBehaviour
 
     private void Move()
     {
-        Vector3 newPos = transform.position + _direction * speed * Time.deltaTime;
+        Vector3 newPos = transform.position + _direction * _currentSpeed * Time.deltaTime;
         if (SceneBoundaries.self.IsInsideAllBoundaries(newPos, offset))
         {
             transform.position = newPos;
@@ -46,17 +49,42 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Change");
         _direction = Vector3.Reflect(_direction, collision.GetContact(0).normal);
         _direction.z = 0;
 
         var brick = collision.gameObject.GetComponent<Brick>();
         brick?.ReceiveHit(power);
+
+        FixBadAngle();
+
+        if (Mathf.Abs(Vector3.Angle(_direction, xAxis)) < 0.3f || Mathf.Abs(Vector3.Angle(_direction, yAxis)) < 0.3f)
+        {
+            Debug.Log("Inc speed");
+            _currentSpeed = baseSpeed * 4;
+        } else {
+            _currentSpeed = baseSpeed;
+        }
     }
 
     private void Die()
     {
         Debug.Log("Dead");
+        GameEvents.self.ShowDeathScreen(true);
         Destroy(this.gameObject);
+    }
+
+
+    private void FixBadAngle()
+    {
+        if (Mathf.Abs(Vector3.Angle(_direction, xAxis)) < angleChangeEps || Mathf.Abs(Vector3.Angle(_direction, yAxis)) < angleChangeEps)
+        {
+            _direction = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), 0f).normalized;
+        }
+    }
+
+    public void StartGame()
+    {
+        _direction = new Vector3(0.9f, 0.9f, 0).normalized;
+        _currentSpeed = baseSpeed;
     }
 }
