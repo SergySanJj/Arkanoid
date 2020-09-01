@@ -47,4 +47,22 @@ public class GameEvents : MonoBehaviour
     {
         OnStartGame?.Invoke();
     }
+
+    public event Action OnSpawnField;
+    public void SpawnField()
+    {
+        OnSpawnField?.Invoke();
+    }
+
+    public event Action OnIncreaceDifficulty;
+    public void IncreaceDifficulty()
+    {
+        OnIncreaceDifficulty?.Invoke();
+    }
+
+    public event Action OnReturnToStart;
+    public void ReturnToStart()
+    {
+        OnReturnToStart?.Invoke();
+    }
 }

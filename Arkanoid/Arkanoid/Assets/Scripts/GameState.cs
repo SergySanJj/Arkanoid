@@ -33,4 +33,21 @@ public class GameState : MonoBehaviour
         points += byValue;
         GameEvents.self.UpdateUI();
     }
+
+    public void BrickDestroyed()
+    {
+        bricksLeft--;
+        RespawnIfNeeded();
+    }
+
+    public void RespawnIfNeeded()
+    {
+        Debug.Log("Remaining " + bricksLeft);
+        if (bricksLeft == 0)
+        {
+            GameEvents.self.IncreaceDifficulty();
+            GameEvents.self.SpawnField();
+            GameEvents.self.ReturnToStart();
+        }
+    }
 }

@@ -7,7 +7,7 @@ public class Brick : MonoBehaviour
     int health = 2;
     int points = 2;
 
-    [SerializeField] private List<Material> materials;
+    [SerializeField] private List<Material> materials = new List<Material>();
 
     private void Start()
     {
@@ -65,6 +65,7 @@ public class Brick : MonoBehaviour
     public void Die()
     {
         GameEvents.self.IncreasedScore(points);
+        GameState.self.BrickDestroyed();
         Destroy(this.gameObject);
     }
 }
