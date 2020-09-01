@@ -30,14 +30,29 @@ public class SideMovementController : MonoBehaviour
         RaycastHit hit;
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-            if (Physics.Raycast(ray, out hit))
+            if (_touchStarted)
             {
-                if (hit.collider.gameObject == this.gameObject)
+                Vector3 touchPos = cam.ScreenToWorldPoint(Input.GetTouch(0).position);
+                touchPos.z = 0;
+                touchPos.y = gameObject.transform.position.y;
+                transform.position = SceneBoundaries.self.LimitHorizontal(touchPos, horizontalOffset);
+
+            }
+            else
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                if (Physics.Raycast(ray, out hit))
                 {
-                    _touchStarted = true;
+                    if (hit.collider.gameObject == this.gameObject)
+                    {
+                        _touchStarted = true;
+                        _startTouchPosition = hit.point;
+                        _startTouchPosition.z = 0;
+                    }
                 }
             }
+        } else {
+            _touchStarted = false;
         }
     }
 
