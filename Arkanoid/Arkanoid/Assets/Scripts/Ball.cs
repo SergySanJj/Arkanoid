@@ -20,6 +20,7 @@ public class Ball : MonoBehaviour
 
         GameEvents.self.OnStartGame += StartGame;
         GameEvents.self.OnReturnToStart += ReturnToStart;
+        GameEvents.self.OnIncreaceDifficulty += IncreaceDifficulty;
         _startPosition = transform.position;
     }
 
@@ -67,5 +68,9 @@ public class Ball : MonoBehaviour
     {
         transform.position = _startPosition;
         rb.velocity = new Vector3(1f, 1f, 0).normalized *  _currentSpeed;
+    }
+    public void IncreaceDifficulty()
+    {
+        _currentSpeed *= 1.2f;
     }
 }
