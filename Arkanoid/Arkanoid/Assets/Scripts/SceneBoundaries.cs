@@ -67,6 +67,17 @@ public class SceneBoundaries : MonoBehaviour
                IsInsideVerticalBoundaries(go, offset);
     }
 
+    public bool IsInsideAllBoundaries(Vector3 pos, float offset)
+    {
+        return IsInsideHorizontalBoundaries(pos, offset) &&
+               IsInsideVerticalBoundaries(pos, offset);
+    }
+
+    public bool EscapedBottom(Vector3 pos, float offset)
+    {
+        return pos.y <= bottomLeft.y + offset;
+    }
+
     public Vector3 LimitHorizontal(Vector3 vec, float offset)
     {
         if (vec.x < topLeft.x + offset)
@@ -92,6 +103,18 @@ public class SceneBoundaries : MonoBehaviour
         return LimitVertical(LimitHorizontal(vec, offset), offset);
     }
 
+    public Vector3 Reflect(Vector3 pos, Vector3 direction, float offset)
+    {
+        if (!IsInsideHorizontalBoundaries(pos, offset))
+        {
+            return Vector3.Reflect(direction, new Vector3(1, 0, 0));
+        } else if (!IsInsideVerticalBoundaries(pos, offset))
+        {
+            return Vector3.Reflect(direction, new Vector3(0, 1, 0));
+        }
+        return direction;
+    }
+
     public void UpdateBoundaries()
     {
         bottomLeft = cam.ViewportToWorldPoint(new Vector3(0, 0, cam.nearClipPlane));
@@ -100,7 +123,11 @@ public class SceneBoundaries : MonoBehaviour
         topRight = cam.ViewportToWorldPoint(new Vector3(1, 1, cam.nearClipPlane));
         topLeft = cam.ViewportToWorldPoint(new Vector3(0, 1, cam.nearClipPlane));
 
+        
+    }
 
+    private void DisplayBoundaries()
+    {
         Instantiate(go, new Vector3(topLeft.x, topLeft.y, cam.nearClipPlane), Quaternion.identity);
         Instantiate(go, new Vector3(topRight.x, topRight.y, cam.nearClipPlane), Quaternion.identity);
         Instantiate(go, new Vector3(bottomLeft.x, bottomLeft.y, cam.nearClipPlane), Quaternion.identity);
