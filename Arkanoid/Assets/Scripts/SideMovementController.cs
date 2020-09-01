@@ -28,7 +28,7 @@ public class SideMovementController : MonoBehaviour
     private void MobileTouchHandler()
     {
         RaycastHit hit;
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        if (Input.touchCount > 0)
         {
             if (_touchStarted)
             {
